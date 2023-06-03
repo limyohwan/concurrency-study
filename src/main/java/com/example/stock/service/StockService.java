@@ -4,6 +4,7 @@ import com.example.stock.domain.Stock;
 import com.example.stock.repository.StockRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
@@ -13,7 +14,8 @@ import java.util.NoSuchElementException;
 public class StockService {
     private final StockRepository stockRepository;
 
-    @Transactional
+//    @Transactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW) // named lock transaction 분리
     public void decrease(Long id, Long quantity){
         Stock stock = stockRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("can't find stock"));
